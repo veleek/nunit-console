@@ -1,0 +1,58 @@
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - "azure-*"
+    paths-ignore:
+      - "*.txt"
+      - "*.md"
+  pull_request:
+    branches-ignore:
+      - "azure-*"
+    paths-ignore:
+      - "*.txt"
+      - "*.md"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    env:
+      MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }}
+      GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Visual Studio
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: "6.x" # Adjust the .NET version as needed
+
+      - name: Run build script
+        shell: pwsh
+        run: .\build.ps1 --target=Appveyor --configuration=Release
+
+    # - name: Upload artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: nupkg-files
+    #     path: package/*.nupkg
+    # - name: Upload MSI artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: msi-files
+    #     path: package/*.msi
+    # - name: Upload ZIP artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: zip-files
+    #     path: package/*.zip
