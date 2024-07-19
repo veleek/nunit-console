@@ -195,6 +195,11 @@ public static class BuildSettings
 		PlatformTarget = PlatformTarget.MSIL,
 		AllowPreviewVersion = MSBuildAllowPreviewVersion
 	};
+	public static DotNetBuildSettings DotNetBuildSettings => new DotNetBuildSettings {
+		Configuration = Configuration,
+		MSBuildSettings = MSBuildSettings,
+		Verbosity = DotNetVerbosity.Normal,
+	};
 
 	// File Header Checks
 	public static bool SuppressHeaderCheck { get; private set; }
