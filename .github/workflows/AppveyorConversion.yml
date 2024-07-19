@@ -29,15 +29,20 @@ jobs:
       GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Visual Studio
-        uses: actions/setup-dotnet@v2
+      - name: ⤵️ Checkout Source
+        uses: actions/checkout@v4
         with:
-          dotnet-version: "6.x" # Adjust the .NET version as needed
+          fetch-depth: 0
 
-      - name: Run build script
+      - name: 🛠️ Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: 🛠️ Install dotnet tools
+        run: dotnet tool restore
+
+      - name: 🔨 Build and Test
         shell: pwsh
         run: .\build.ps1 --target=Appveyor --configuration=Release
 
