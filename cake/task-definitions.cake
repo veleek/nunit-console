@@ -73,7 +73,7 @@ BuildTasks.BuildTask = Task("Build")
 	.Does(() =>
 	{
 		// MSBuild(BuildSettings.SolutionFile, BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion));
-		BuildSettings.DotNetBuildSettings.MSBuildSettings = BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion)
+		// BuildSettings.DotNetBuildSettings.MSBuildSettings = BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion)
 		DotNetBuild(BuildSettings.SolutionFile, BuildSettings.DotNetBuildSettings)
 	});
 

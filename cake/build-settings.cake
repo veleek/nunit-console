@@ -197,7 +197,6 @@ public static class BuildSettings
 	};
 	public static DotNetBuildSettings DotNetBuildSettings => new DotNetBuildSettings {
 		Configuration = Configuration,
-		MSBuildSettings = MSBuildSettings,
 		Verbosity = DotNetVerbosity.Normal,
 	};
 
