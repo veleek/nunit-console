@@ -72,9 +72,9 @@ BuildTasks.BuildTask = Task("Build")
 	.Description("Build the solution")
 	.Does(() =>
 	{
-		// MSBuild(BuildSettings.SolutionFile, BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion));
-		// BuildSettings.DotNetBuildSettings.MSBuildSettings = BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion)
-		DotNetBuild(BuildSettings.SolutionFile, BuildSettings.DotNetBuildSettings)
+        // MSBuild(BuildSettings.SolutionFile, BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion));
+        // BuildSettings.DotNetBuildSettings.MSBuildSettings = BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion)
+        DotNetBuild(BuildSettings.SolutionFile, BuildSettings.DotNetBuildSettings);
 	});
 
 BuildTasks.UnitTestTask = Task("Test")
