@@ -51,8 +51,8 @@ jobs:
 
       - name: 🎂 Run cake
         shell: pwsh
-        run: dotnet cake --target=Package --configuration=Release
-        run: dotnet cake --target=Package --configuration=Release
+        # run: dotnet cake --target=Package --configuration=Release
+        run: dotnet cake --target=BuildTestAndPackage --configuration=Release
 
     # - name: Upload artifacts
     #   uses: actions/upload-artifact@v3
