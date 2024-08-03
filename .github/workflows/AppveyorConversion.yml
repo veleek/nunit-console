@@ -57,9 +57,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: NUnitConsole.binlog
+          name: NUnitConsoleLogs
           # This path is defined in build-settings.cake
-          path: NUnitConsole.binlog
+          path: "*.binlog"
           if-no-files-found: error
           retention-days: 1
 

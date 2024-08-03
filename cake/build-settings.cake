@@ -206,7 +206,7 @@ public static class BuildSettings
             BinaryLogger = new MSBuildBinaryLoggerSettings
             {
                 Enabled = true,
-                FileName = "TestNUnitBuild.binlog",
+                FileName = "NUnitConsole.binlog",
                 Imports = MSBuildBinaryLoggerImports.Embed
             }
         }
