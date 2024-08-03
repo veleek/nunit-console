@@ -20,8 +20,8 @@ jobs:
 
     strategy:
       matrix:
-        # os: [windows-latest]
-        os: [ubuntu-latest, windows-latest]
+        os: [windows-latest]
+        # os: [ubuntu-latest, windows-latest]
       fail-fast: false
 
     env:
@@ -49,9 +49,10 @@ jobs:
       - name: 🛠️ Install dotnet tools
         run: dotnet tool restore
 
-      - name: 🔨 Build and Test
+      - name: 🎂 Run cake
         shell: pwsh
-        run: .\build.ps1 --target=Appveyor --configuration=Release
+        run: dotnet cake --target=Package --configuration=Release
+        run: dotnet cake --target=Package --configuration=Release
 
     # - name: Upload artifacts
     #   uses: actions/upload-artifact@v3
