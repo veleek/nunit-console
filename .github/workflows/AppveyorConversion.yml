@@ -46,13 +46,23 @@ jobs:
             6.0.x
             8.0.100
 
-      - name: 🛠️ Install dotnet tools
+      - name: 🔧 Install dotnet tools
         run: dotnet tool restore
 
-      - name: 🎂 Run cake
+      - name: 🍰 Run cake
         shell: pwsh
         # run: dotnet cake --target=Package --configuration=Release
         run: dotnet cake --target=BuildTestAndPackage --configuration=Release
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-binlog
+          # This path is defined in build-settings.cake
+          path: TestNUnitBuild.binlog
+          if-no-files-found: fail
+          retention-days: 1
 
     # - name: Upload artifacts
     #   uses: actions/upload-artifact@v3
