@@ -61,7 +61,7 @@ jobs:
           name: build-binlog
           # This path is defined in build-settings.cake
           path: TestNUnitBuild.binlog
-          if-no-files-found: fail
+          if-no-files-found: error
           retention-days: 1
 
     # - name: Upload artifacts
