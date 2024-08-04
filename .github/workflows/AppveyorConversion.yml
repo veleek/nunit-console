@@ -1,0 +1,90 @@
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - "azure-*"
+    paths-ignore:
+      - "*.txt"
+      - "*.md"
+  # pull_request:
+  #   branches-ignore:
+  #     - "azure-*"
+  #   paths-ignore:
+  #     - "*.txt"
+  #     - "*.md"
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest]
+        # os: [ubuntu-latest, windows-latest]
+      fail-fast: false
+
+    env:
+      MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      CHOCO_API_KEY: ${{ secrets.CHOCO_API_KEY }}
+      GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+
+    steps:
+      - name: ⤵️ Checkout Source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🛠️ Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          # global-json-file: global.json
+          dotnet-version: |
+            2.1.x
+            3.1.x
+            6.0.x
+            8.0.100
+
+      - name: 🔧 Install dotnet tools
+        run: dotnet tool restore
+
+      - name: 🍰 Run cake test
+        shell: pwsh
+        run: dotnet cake --target=Test --configuration=Release
+
+      - name: 🪵 Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: NUnitConsoleLogs
+          # This path is defined in build-settings.cake
+          path: "*.binlog"
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: 🍰 Run cake package
+        if: always()
+        shell: pwsh
+        run: dotnet cake --target=BuildTestAndPackage --configuration=Release
+
+      - name: 🍰 Run cake buildtestandpackage
+        if: always()
+        shell: pwsh
+        run: dotnet cake --target=BuildTestAndPackage --configuration=Release
+
+    # - name: Upload artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: nupkg-files
+    #     path: package/*.nupkg
+    # - name: Upload MSI artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: msi-files
+    #     path: package/*.msi
+    # - name: Upload ZIP artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: zip-files
+    #     path: package/*.zip

@@ -19,7 +19,7 @@ public abstract class PackageDefinition
     /// <param name="checks">An array of PackageChecks be made on the content of the package. Optional.</param>
     /// <param name="symbols">An array of PackageChecks to be made on the symbol package, if one is created. Optional. Only supported for nuget packages.</param>
     /// <param name="tests">An array of PackageTests to be run against the package. Optional.</param>
-	protected PackageDefinition(
+    protected PackageDefinition(
         PackageType packageType,
         string id,
         string source,
@@ -47,9 +47,9 @@ public abstract class PackageDefinition
     }
 
     public PackageType PackageType { get; }
-	public string PackageId { get; }
+    public string PackageId { get; }
     public string PackageVersion { get; protected set; }
-	public string PackageSource { get; }
+    public string PackageSource { get; }
     public string BasePath { get; }
     public PackageTestRunner TestRunner { get; }
     public string ExtraTestArguments { get; }
@@ -68,7 +68,7 @@ public abstract class PackageDefinition
     public abstract string PackageResultDirectory { get; }
     // The directory into which extensions to the test runner are installed
     public abstract string ExtensionInstallDirectory { get; }
-    
+
     public string PackageFilePath => BuildSettings.PackageDirectory + PackageFileName;
     public string PackageTestDirectory => $"{PackageInstallDirectory}{PackageId}.{PackageVersion}/";
 
@@ -93,9 +93,9 @@ public abstract class PackageDefinition
                 if (index <= 0)
                     throw new ArgumentException("Selection expression does not contain =", "where");
                 string prop = factor.Substring(0, index).Trim();
-                string val = factor.Substring(index+1).Trim();
+                string val = factor.Substring(index + 1).Trim();
 
-                switch(prop.ToUpper())
+                switch (prop.ToUpper())
                 {
                     case "ID":
                         return PackageId.ToLower() == val.ToLower();
@@ -152,20 +152,20 @@ public abstract class PackageDefinition
     // Chocolatey packages. Other package types should override.
     public virtual void InstallPackage()
     {
-	    var installSettings = new NuGetInstallSettings
-	    {
-		    Source = new [] {
-                // Package will be found here
-                BuildSettings.PackageDirectory,
-                // Dependencies may be in any of these
-			    "https://www.myget.org/F/nunit/api/v3/index.json",
-			    "https://api.nuget.org/v3/index.json" },
+        var installSettings = new NuGetInstallSettings
+        {
+            Source = new[] {
+				// Package will be found here
+				BuildSettings.PackageDirectory,
+				// Dependencies may be in any of these
+				"https://www.myget.org/F/nunit/api/v3/index.json",
+                "https://api.nuget.org/v3/index.json" },
             Version = PackageVersion,
             OutputDirectory = PackageInstallDirectory,
             //ExcludeVersion = true,
-		    Prerelease = true,
-		    NoCache = true
-	    };
+            Prerelease = true,
+            NoCache = true
+        };
 
         _context.NuGetInstall(PackageId, installSettings);
     }
@@ -180,7 +180,7 @@ public abstract class PackageDefinition
 
         if (allOK)
             Console.WriteLine("All checks passed!");
-        else 
+        else
             throw new Exception("Verification failed!");
     }
 
@@ -192,13 +192,13 @@ public abstract class PackageDefinition
 
         _context.CleanDirectory(PackageResultDirectory);
 
-		// Ensure we start out each package with no extensions installed.
-		// If any package test installs an extension, it remains available
-		// for subsequent tests of the same package only. 
-		//foreach (DirectoryPath dirPath in _context.GetDirectories(ExtensionInstallDirectory + "*"))
+        // Ensure we start out each package with no extensions installed.
+        // If any package test installs an extension, it remains available
+        // for subsequent tests of the same package only.
+        //foreach (DirectoryPath dirPath in _context.GetDirectories(ExtensionInstallDirectory + "*"))
         //{
-		//    _context.DeleteDirectory(dirPath, new DeleteDirectorySettings() { Recursive = true });
-		//    _context.Information("Deleted directory " + dirPath.GetDirectoryName());
+        //    _context.DeleteDirectory(dirPath, new DeleteDirectorySettings() { Recursive = true });
+        //    _context.Information("Deleted directory " + dirPath.GetDirectoryName());
         //}
 
         //if (TestRunner.RequiresInstallation)
@@ -217,7 +217,7 @@ public abstract class PackageDefinition
 
             Banner.Display(packageTest.Description);
 
-			_context.CreateDirectory(testResultDir);
+            _context.CreateDirectory(testResultDir);
             string arguments = $"{packageTest.Arguments} {ExtraTestArguments} --work={testResultDir}";
             if (CommandLineOptions.TraceLevel.Value != "Off")
                 arguments += $" --trace:{CommandLineOptions.TraceLevel.Value}";
