@@ -1,6 +1,12 @@
 ﻿name: NUnitConsoleAndEngine.CI
 
 on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "*.txt"
+      - "*.md"
   pull_request:
     branches-ignore:
       - "azure-*"
@@ -54,7 +60,7 @@ jobs:
       - name: 🍰 Run cake
         shell: pwsh
         # If you need to get more verbose logging, add the following to the dotnet-cake above:  --verbosity=diagnostic
-        run: dotnet cake --target=Test --test-run-name=${{ matrix.testRunName }} --configuration=Release
+        run: dotnet cake --target=Package --test-run-name=${{ matrix.testRunName }} --configuration=Release
 
       - name: 🪵 Upload build logs
         if: always()
