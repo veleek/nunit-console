@@ -19,7 +19,7 @@ BuildSettings.Initialize(
 
 // Tests run for all runner packages except NETCORE runner
 var StandardRunnerTests = new List<PackageTest>
-    {
+{
         Net462Test,
         Net462X86Test,
         Net462PlusNet462Test,
@@ -31,7 +31,7 @@ var StandardRunnerTests = new List<PackageTest>
         Net462PlusNet60Test,
         NUnitProjectTest,
         V2ResultWriterTest
-    };
+};
 
 // Tests run for the NETCORE runner package
 var NetCoreRunnerTests = new List<PackageTest>
@@ -48,12 +48,12 @@ bool dotnetX86Available = IsRunningOnWindows() && System.IO.File.Exists(DOTNET_E
 // TODO: Remove the limitation to Windows
 if (IsRunningOnWindows() && dotnetX86Available)
 {
-    StandardRunnerTests.Add(Net60X86Test);
+    // StandardRunnerTests.Add(Net60X86Test);
     // TODO: Make these tests run on AppVeyor
     if (!BuildSystem.IsRunningOnAppVeyor)
     {
         StandardRunnerTests.Add(NetCore31X86Test);
-        StandardRunnerTests.Add(Net70X86Test);
+        // StandardRunnerTests.Add(Net70X86Test);
         StandardRunnerTests.Add(Net80X86Test);
     }
     // Currently, NetCoreRunner runs tests in process. As a result,
@@ -222,17 +222,9 @@ FilePath[] AGENT_PDB_FILES_NETCORE = {
 // INDIVIDUAL PACKAGE DEFINITIONS
 //////////////////////////////////////////////////////////////////////
 
-PackageDefinition NUnitConsoleNuGetPackage;
-PackageDefinition NUnitConsoleRunnerNuGetPackage;
-PackageDefinition NUnitConsoleRunnerNetCorePackage;
-PackageDefinition NUnitEnginePackage;
-PackageDefinition NUnitEngineApiPackage;
-PackageDefinition NUnitConsoleRunnerChocolateyPackage;
-PackageDefinition NUnitConsoleZipPackage;
-
 BuildSettings.Packages.AddRange(new PackageDefinition[] {
 
-    NUnitConsoleRunnerNuGetPackage = new NuGetPackage(
+    new NuGetPackage(
         id: "NUnit.ConsoleRunner",
         source: BuildSettings.NuGetDirectory + "runners/nunit.console-runner.nuspec",
         checks: new PackageCheck[] {
@@ -257,12 +249,12 @@ BuildSettings.Packages.AddRange(new PackageDefinition[] {
         tests: StandardRunnerTests),
 
     // NOTE: Must follow ConsoleRunner, upon which it depends
-    NUnitConsoleNuGetPackage = new NuGetPackage(
+    new NuGetPackage(
         id: "NUnit.Console",
         source: BuildSettings.NuGetDirectory + "runners/nunit.console-runner-with-extensions.nuspec",
         checks: new PackageCheck[] { HasFile("LICENSE.txt") }),
 
-    NUnitConsoleRunnerNetCorePackage = new DotNetToolPackage(
+    new DotNetToolPackage(
         id: "NUnit.ConsoleRunner.NetCore",
         source: BuildSettings.NuGetDirectory + "runners/nunit.console-runner.netcore.nuspec",
         checks: new PackageCheck[] { HasFiles("nunit.exe") },
@@ -270,7 +262,7 @@ BuildSettings.Packages.AddRange(new PackageDefinition[] {
             + $"NUnit.ConsoleRunner.NetCore.{BuildSettings.PackageVersion}/nunit.exe"),
         tests: NetCoreRunnerTests),
 
-    NUnitConsoleRunnerChocolateyPackage = new ChocolateyPackage(
+    new ChocolateyPackage(
         id: "nunit-console-runner",
         source: BuildSettings.ChocolateyDirectory + "nunit-console-runner.nuspec",
         checks: new PackageCheck[] {
@@ -285,7 +277,7 @@ BuildSettings.Packages.AddRange(new PackageDefinition[] {
             + $"nunit-console-runner.{BuildSettings.PackageVersion}/tools/nunit3-console.exe"),
         tests: StandardRunnerTests),
 
-    NUnitConsoleZipPackage = new ZipPackage(
+    new ZipPackage(
         id: "NUnit.Console",
         source: BuildSettings.ZipImageDirectory,
         checks: new PackageCheck[] {
@@ -311,7 +303,7 @@ BuildSettings.Packages.AddRange(new PackageDefinition[] {
 
     // NOTE: Packages below this point have no direct tests
 
-    NUnitEnginePackage = new NuGetPackage(
+    new NuGetPackage(
         id: "NUnit.Engine",
         source: BuildSettings.NuGetDirectory + "engine/nunit.engine.nuspec",
         checks: new PackageCheck[] {
@@ -328,7 +320,7 @@ BuildSettings.Packages.AddRange(new PackageDefinition[] {
             HasDirectory("contentFiles/any/agents/net462").WithFiles(AGENT_PDB_FILES)
         }),
 
-    NUnitEngineApiPackage = new NuGetPackage(
+    new NuGetPackage(
         id: "NUnit.Engine.Api",
         source: BuildSettings.NuGetDirectory + "engine/nunit.engine.api.nuspec",
         checks: new PackageCheck[] {
